@@ -23,11 +23,13 @@ def root():
     query2 = 'CREATE TABLE diagnostic(id INT PRIMARY KEY AUTO_INCREMENT, text VARCHAR(255) NOT NULL);';
     query3 = 'INSERT INTO diagnostic (text) VALUES ("MySQL is working! hernanb2")';
     query4 = 'SELECT * FROM diagnostic;';
+    base = "<h1>MySQL Results</h1>"
     cur = mysql.connection.cursor()
     cur.execute(query1)
     cur.execute(query2)
     cur.execute(query3)
     cur.execute(query4)
+    cur.execute(base)
     results = cur.fetchall()
 
     return results[0]
