@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import os
 import database.db_connector as db
+import json
 
 # Configuration
 
@@ -9,41 +10,31 @@ db_connection = db.connect_to_database()
 
 # Routes 
 
-people_from_app_py = [
-{
-    "name": "Thomas",
-    "age": 33,
-    "location": "New Mexico",
-    "favorite_color": "Blue"
-},
-{
-    "name": "Gregory",
-    "age": 41,
-    "location": "Texas",
-    "favorite_color": "Red"
-},
-{
-    "name": "Vincent",
-    "age": 27,
-    "location": "Ohio",
-    "favorite_color": "Green"
-},
-{
-    "name": "Alexander",
-    "age": 29,
-    "location": "Florida",
-    "favorite_color": "Orange"
-}
-]
-
-
 @app.route('/')
 def root():
     return render_template("main.j2")
 
-@app.route('/tickets_sold')
-def bsg_people():
-    return "This is the tickets_sold route."
+@app.route('/visiting_teams')
+def visiting_teams():
+    # Write the query and save it to a variable
+    query = "SELECT * FROM `visiting_teams`;"
+
+    # The way the interface between MySQL and Flask works is by using an
+    # object called a cursor. Think of it as the object that acts as the
+    # person typing commands directly into the MySQL command line and
+    # reading them back to you when it gets results
+    cursor = db.execute_query(db_connection=db_connection, query=query)
+
+    # The cursor.fetchall() function tells the cursor object to return all
+    # the results from the previously executed
+    #
+    # The json.dumps() function simply converts the dictionary that was
+    # returned by the fetchall() call to JSON so we can display it on the
+    # page.
+    results = json.dumps(cursor.fetchall())
+
+    # Sends the results back to the web browser.
+    return results
 # Listener
 
 if __name__ == "__main__":

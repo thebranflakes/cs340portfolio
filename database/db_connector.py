@@ -11,7 +11,7 @@ user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
 
-def connect_to_database(host = host, user = user, passwd = passwd, db = db):
+def connect_to_database(host = 'classmysql.engr.oregonstate.edu', user = 'cs340_hernanb2', passwd = '4437', db = 'cs340_hernanb2'):
     '''
     connects to a database and returns a database objects
     '''
@@ -55,7 +55,7 @@ def execute_query(db_connection = None, query = None, query_params = ()):
 if __name__ == '__main__':
     print("Executing a sample query on the database using the credentials from db_credentials.py")
     db = connect_to_database()
-    query = "SELECT * from tickets_sold;"
+    query = "SELECT * from `visiting_teams`;"
     results = execute_query(db, query);
     print("Printing results of %s" % query)
 
