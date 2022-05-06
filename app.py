@@ -17,24 +17,12 @@ def root():
 @app.route('/visiting_teams')
 def visiting_teams():
     # Write the query and save it to a variable
-    query = "SELECT * FROM `visiting_teams`;"
-
-    # The way the interface between MySQL and Flask works is by using an
-    # object called a cursor. Think of it as the object that acts as the
-    # person typing commands directly into the MySQL command line and
-    # reading them back to you when it gets results
+    query = "SELECT * FROM visiting_teams;"
     cursor = db.execute_query(db_connection=db_connection, query=query)
-
-    # The cursor.fetchall() function tells the cursor object to return all
-    # the results from the previously executed
-    #
-    # The json.dumps() function simply converts the dictionary that was
-    # returned by the fetchall() call to JSON so we can display it on the
-    # page.
-    results = json.dumps(cursor.fetchall())
+    results = cursor.fetchall()
 
     # Sends the results back to the web browser.
-    return results
+    return render_template("database_template.j2", visiting_teams=results)
 # Listener
 
 if __name__ == "__main__":
