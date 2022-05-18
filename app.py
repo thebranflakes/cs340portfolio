@@ -8,11 +8,37 @@ import json
 app = Flask(__name__)
 db_connection = db.connect_to_database()
 
+app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
+app.config['MYSQL_USER'] = 'cs340_hernanb2'
+app.config['MYSQL_PASSWORD'] = '4437' #last 4 of onid
+app.config['MYSQL_DB'] = 'cs340_hernanb2'
+app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+
 # Routes 
 
 @app.route('/')
 def root():
     return render_template("main.j2")
+
+@app.route("/players", methods=["POST", "GET"])
+def players():
+    if request.method == "GET":
+        query = "SELECT * FROM players;"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        return render_template("players.j2", data-data)
+
+    if request.method == "POST":
+        if request.form.get("Add_Player")
+        first_name = request.form["first_name"]
+        last_name = request.form["last_name"]
+        age = request.form["age"]
+        height = request.form["height"]
+        year = request.form["age"]
+
+        return redirect("/players")
 
 @app.route('/visiting_teams')
 def visiting_teams():
