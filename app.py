@@ -37,7 +37,12 @@ def players():
             last_name = request.form["last_name"]
             age = request.form["age"]
             height = request.form["height"]
-            year = request.form["age"]
+            year = request.form["year"]
+
+        query = "INSERT INTO players (first_name, last_name, age, height, year) VALUES (%s, %s, %s, %s, %s)"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (first_name, last_name, age, height, year))
+        mysql.connection.commit()
 
         return redirect("/players")
 
@@ -47,6 +52,33 @@ def delete_players(player_id):
     cur = mysql.connection.cursor()
     cur.execute(query, (player_id,))
     mysql.connection.commit()
+
+    return redirect("/players")
+
+@app.route("/edit_players/<int:player_id>", methods=["POST", "GET"])
+def edit_players(player_id):
+    if request.method == "GET":
+        query = "SELECT * FROM players WHERE player_id = %s" % (player_id)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        return render_template("edit_players.j2", data=data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Players"):
+            first_name = request.form["first_name"]
+            last_name = request.form["last_name"]
+            age = request.form["age"]
+            height = request.form["height"]
+            year = request.form["year"]
+
+            query = "UPDATE players SET players.first_name = %s, players.last_name = %s, players.age = %s, players.height = %s, players.year = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (first_name, last_name, age, height, year))
+            mysql.connection.commit()
+
+        return redirect("/players")
 
 @app.route('/visiting_teams')
 def visiting_teams():
