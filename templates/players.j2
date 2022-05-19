@@ -1,0 +1,71 @@
+<html>
+    <head>
+      <title>Players</title>   
+    </head>
+    <body>
+    <h1>Players</h1>
+    <a href="/">Home</a>
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+            <table border="1">
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+			<th>Delete Player</th>
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons 
+						    <td><a href="edit_people/{{item.id}}" class="btn btn-default">Edit</a></td>-->
+						    <td><a href="delete_player/{{item.player_id}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table> 
+
+<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+		<!-- form to INSERT new data into players-->
+		<form id="insertPlayer" action="/players" method="post">
+			<legend><strong>Add Person</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="make">first name:</label>
+				<input type="text" class="form-control" id="first_name" name="first_name" pattern="[A-Za-z]{1,}" placeholder="" required>
+
+				<label for="model">last name:</label>
+				<input type="text" class="form-control" id="last_name" name="last_name" pattern="[A-Za-z0-9]{1,}" placeholder="" required>
+
+				<label for="color">age:</label>
+				<input type="number" class="form-control" id="age" name="age" pattern="[A-Za-z0-9]{1,}" placeholder=""> 
+
+                <label for="color">height:</label>
+				<input type="number" class="form-control" id="height" name="height" pattern="[A-Za-z0-9]{1,}" placeholder=""> 
+
+                <label for="color">year:</label>
+				<input type="number" class="form-control" id="year" name="year" pattern="[A-Za-z0-9]{1,}" placeholder=""> 
+            </fieldset>
+
+            <!-- Create 'Add Player' and 'Cancel' buttons -->
+			<input type="submit" value="Add Player" name="Add_Player" class="btn btn-primary" style="margin:.5rem;">
+        </form>
+	</div><!--insert-->

@@ -1,18 +1,19 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, json, redirect
+from flask_mysqldb import MySQL
+from flask import request
 import os
-import database.db_connector as db
-import json
-
 # Configuration
 
 app = Flask(__name__)
-db_connection = db.connect_to_database()
+
 
 app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
 app.config['MYSQL_USER'] = 'cs340_hernanb2'
 app.config['MYSQL_PASSWORD'] = '4437' #last 4 of onid
 app.config['MYSQL_DB'] = 'cs340_hernanb2'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+
+mysql = MySQL(app)
 
 # Routes 
 
@@ -28,17 +29,24 @@ def players():
         cur.execute(query)
         data = cur.fetchall()
 
-        return render_template("players.j2", data-data)
+        return render_template("players.j2", data=data)
 
     if request.method == "POST":
-        if request.form.get("Add_Player")
-        first_name = request.form["first_name"]
-        last_name = request.form["last_name"]
-        age = request.form["age"]
-        height = request.form["height"]
-        year = request.form["age"]
+        if request.form.get("Add_Player"):
+            first_name = request.form["first_name"]
+            last_name = request.form["last_name"]
+            age = request.form["age"]
+            height = request.form["height"]
+            year = request.form["age"]
 
         return redirect("/players")
+
+@app.route("/delete_players/<int:player_id>")
+def delete_players(player_id):
+    query = "DELETE FROM players WHERE player_id = '%s';"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (player_id,))
+    mysql.connection.commit()
 
 @app.route('/visiting_teams')
 def visiting_teams():
