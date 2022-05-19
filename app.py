@@ -73,10 +73,10 @@ def edit_players(player_id):
             height = request.form["height"]
             year = request.form["year"]
 
-            query = "UPDATE players SET players.first_name = %s, players.last_name = %s, players.age = %s, players.height = %s, players.year = %s"
-            cur = mysql.connection.cursor()
-            cur.execute(query, (first_name, last_name, age, height, year))
-            mysql.connection.commit()
+        query = "UPDATE players SET players.first_name = %s, players.last_name = %s, players.age = %s, players.height = %s, players.year = %s WHERE players.player_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (first_name, last_name, age, height, year, player_id))
+        mysql.connection.commit()
 
         return redirect("/players")
 

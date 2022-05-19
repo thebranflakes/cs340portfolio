@@ -8,7 +8,7 @@
 <body>
     <div>
         <table border="1" cellpadding="5"> 
-            <caption> Editing User: </caption>
+            <caption> Editing Player: </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
                 <thead>
@@ -62,7 +62,7 @@
                     <input type="number" value="{{data[0].year}}" class="form-control" id="year" name="year" required> 
                 
                 </fieldset>
-                <input type="submit" value="Edit Player" name="Edit_Player" class="btn btn-primary" style="margin:.5rem;">
+                <input type="submit" value="Edit Player" name="Edit_Players" class="btn btn-primary" style="margin:.5rem;">
                 <a href='/people'><input class="btn" type="button" value="cancel"></a>
             </form>
 
