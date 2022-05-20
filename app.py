@@ -83,7 +83,7 @@ def edit_players(player_id):
 @app.route('/player_stats', methods=["POST", "GET"])
 def player_stats():
     if request.method == "GET":
-        query = "SELECT player_stats.player_stats_id, players.first_name, players.last_name, player_stats.points, player_stats.rebounds, player_stats.assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id"
+        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -93,7 +93,7 @@ def player_stats():
 @app.route('/home_game_sales', methods=["POST", "GET"])
 def home_game_sales():
     if request.method == "GET":
-        query = "SELECT home_game_sales.home_game_date, home_game_sales.tickets_sold, home_game_sales.merchandise_revenue, home_game_sales.concession_revenue, visiting_teams.name FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
+        query = "SELECT home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
