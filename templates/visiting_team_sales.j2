@@ -1,9 +1,9 @@
 <html>
     <head>
-      <title>Player Stats</title>   
+      <title>Home Game Sales</title>   
     </head>
     <body>
-    <h1>Player Stats</h1>
+    <h1>Home Game Sales</h1>
     <a href="/">Home</a>
             <!-- Access data tuple passed from app.py --> 
             {% if data %}
@@ -18,8 +18,8 @@
 					
                         <!-- End of this for loop -->
                         {% endfor %} 
-            <th>Edit Stats</th>
-			<th>Delete Stats</th>
+            <th>Edit Sales</th>
+			<th>Delete Sales</th>
                     </tr>
 
 				<tbody>
@@ -33,8 +33,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_player_stats/{{item.player_stats_id}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_player_stats/{{item.player_stats_id}}" class="btn btn-default">Delete</a></td>
+						    <td><a href="edit_home_game_sales/{{item.home_game_date}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_home_game_sales/{{item.home_game_date}}" class="btn btn-default">Delete</a></td>
 
 					    </tr> 
                         {% endfor %} 

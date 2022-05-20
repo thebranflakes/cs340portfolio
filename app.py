@@ -90,6 +90,16 @@ def player_stats():
 
         return render_template("player_stats.j2", data=data)
 
+@app.route('/home_game_sales', methods=["POST", "GET"])
+def home_game_sales():
+    if request.method == "GET":
+        query = "SELECT home_game_sales.home_game_date, home_game_sales.tickets_sold, home_game_sales.merchandise_revenue, home_game_sales.concession_revenue, visiting_teams.name FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        return render_template("visiting_team_sales.j2", data=data)
+
 # Listener
 
 if __name__ == "__main__":
