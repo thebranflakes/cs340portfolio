@@ -80,15 +80,16 @@ def edit_players(player_id):
 
         return redirect("/players")
 
-@app.route('/visiting_teams')
-def visiting_teams():
-    # Write the query and save it to a variable
-    query = "SELECT * FROM visiting_teams;"
-    cursor = db.execute_query(db_connection=db_connection, query=query)
-    results = cursor.fetchall()
+@app.route('/player_stats', methods=["POST", "GET"])
+def player_stats():
+    if request.method == "GET":
+        query = "SELECT player_stats.player_stats_id, players.first_name, players.last_name, player_stats.points, player_stats.rebounds, player_stats.assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id"
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
 
-    # Sends the results back to the web browser.
-    return render_template("database_template.j2", visiting_teams=results)
+        return render_template("player_stats.j2", data=data)
+
 # Listener
 
 if __name__ == "__main__":
