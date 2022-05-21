@@ -155,6 +155,14 @@ def home_game_sales():
         
         return redirect("/home_game_sales")
 
+@app.route("/delete_home_game_sales/<home_game_date>")
+def delete_home_game_sales(home_game_date):
+    query = "DELETE FROM home_game_sales WHERE home_game_date = '%s';"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (home_game_date,))
+    mysql.connection.commit()
+
+    return redirect("/home_game_sales")
 
 
 
