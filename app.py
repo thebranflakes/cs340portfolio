@@ -98,7 +98,37 @@ def home_game_sales():
         cur.execute(query)
         data = cur.fetchall()
 
-        return render_template("visiting_team_sales.j2", data=data)
+        query2 = "SELECT visiting_team_id, name FROM visiting_teams"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        visiting_team_data = cur.fetchall()
+
+        return render_template("home_game_sales.j2", data=data, visiting_team_data=visiting_team_data)
+
+    if request.method == "POST":
+        if request.form.get("Add_Game"):
+            home_game_date = request.form["home_game_date"]
+            visiting_team_id = request.form["visiting_team_id"]
+            tickets_sold = request.form["tickets_sold"]
+            merchandise_revenue = request.form["merchandise_revenue"]
+            concession_revenue = request.form["concession_revenue"]
+
+            if visiting_team_id == "0":
+                query = "INSERT INTO home_game_sales (home_game_date, tickets_sold, merchandise_revenue, concession_revenue) VALUES (%s, %s, %s, %s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue))
+                mysql.connection.commmit()
+
+            else:
+                query = "INSERT INTO home_game_sales (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue) VALUES (%s, %s, %s, %s, %s)"
+                cur = mysql.connection.cursor()
+                cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue))
+                mysql.connection.commmit()
+        
+        return redirect("/home_game_sales")
+
+
+
 
 # Listener
 
