@@ -88,7 +88,35 @@ def player_stats():
         cur.execute(query)
         data = cur.fetchall()
 
-        return render_template("player_stats.j2", data=data)
+        query2 = "SELECT player_id, first_name, last_name FROM players"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        player_data = cur.fetchall()
+
+        return render_template("player_stats.j2", data=data, player_data=player_data)
+
+    if request.method == "POST":
+        if request.form.get("Add_Stats"):
+            player_id = request.form["player_id"]
+            points = request.form["points"]
+            rebounds = request.form["rebounds"]
+            assists = request.form["assists"]
+            
+        query = "INSERT INTO player_stats (player_id, points, rebounds, assists) VALUES (%s, %s, %s, %s)"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (player_id, points, rebounds, assists))
+        mysql.connection.commit()
+
+        return redirect("/player_stats")
+
+@app.route("/delete_player_stats/<int:player_stats_id>")
+def delete_player_stats(player_stats_id):
+    query = "DELETE FROM player_stats WHERE player_stats_id = '%s';"
+    cur = mysql.connection.cursor()
+    cur.execute(query, (player_stats_id,))
+    mysql.connection.commit()
+
+    return redirect("/player_stats")
 
 @app.route('/home_game_sales', methods=["POST", "GET"])
 def home_game_sales():
@@ -117,13 +145,13 @@ def home_game_sales():
                 query = "INSERT INTO home_game_sales (home_game_date, tickets_sold, merchandise_revenue, concession_revenue) VALUES (%s, %s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue))
-                mysql.connection.commmit()
+                mysql.connection.commit()
 
             else:
                 query = "INSERT INTO home_game_sales (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue) VALUES (%s, %s, %s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue))
-                mysql.connection.commmit()
+                mysql.connection.commit()
         
         return redirect("/home_game_sales")
 

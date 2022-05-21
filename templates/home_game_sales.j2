@@ -52,8 +52,12 @@
 				<label for="make">Game Date:</label>
 				<input type="Date" class="form-control" id="home_game_date" name="home_game_date" required>
 
-				<label for="model">Visting Team:</label>
-				<input type="text" class="form-control" id="visiting_team_id" name="visiting_team_id" placeholder="">
+				<label for="make">Visitor:</label>
+				<select name="visiting_team_id" id="visiting_team_id">
+            		{% for item in visiting_team_data %}
+            		<option value="{{item.visiting_team_id}}">{{item.name}} </option>
+            		{% endfor %}
+            		</select>
 
 				<label for="color">Tickets Sold:</label>
 				<input type="number" class="form-control" id="tickets_sold" name="tickets_sold" required> 

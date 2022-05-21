@@ -42,3 +42,32 @@
         </table> 
 
 <p>&nbsp;</p>
+
+<div id="insert">
+		<!-- form to INSERT new data into bsg_people-->
+		<form id="Add_Stats" action="/player_stats" method="post">
+			<legend><strong>Add Player Stats</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+
+				<label for="make">Player:</label>
+				<select name="player_id" id="player_id">
+            		{% for item in player_data %}
+            		<option value="{{item.player_id}}">{{item.first_name, item.last_name}} </option>
+            		{% endfor %}
+            		</select>
+
+				<label for="color">Points:</label>
+				<input type="number" class="form-control" id="points" name="points" required> 
+
+				<label for="color">Rebounds:</label>
+				<input type="number" class="form-control" id="rebounds" name="rebounds" required> 
+
+				<label for="color">Assists:</label>
+				<input type="number" class="form-control" id="assists" name="assists" required> 
+            </fieldset>
+
+            <!-- Create 'Add Person' and 'Cancel' buttons -->
+			<input type="submit" value="Add Stats" name="Add_Stats" class="btn btn-primary" style="margin:.5rem;">
+        </form>
+	</div><!--insert-->
