@@ -10,16 +10,16 @@
             <table border="1">
 			    <thead>
 				    <tr>
-					    <!-- Iterate through each key in the first entry to get the column name -->
-                        {% for key in data[0].keys() %}
-					    
-                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
-					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
-					
-                        <!-- End of this for loop -->
-                        {% endfor %} 
-            <th>Edit Sales</th>
-			<th>Delete Sales</th>
+							<!-- Iterate through each key in the first entry to get the column name -->
+							{% for key in data[0].keys() %}
+							
+							<!-- Create a <th> tag with the key inside of it, this will be our header row -->
+							<th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+						
+							<!-- End of this for loop -->
+							{% endfor %} 
+							<th>Edit Sales</th>
+							<th>Delete Sales</th>
                     </tr>
 
 				<tbody>

@@ -2,6 +2,7 @@ from flask import Flask, render_template, json, redirect
 from flask_mysqldb import MySQL
 from flask import request
 import os
+import datetime
 # Configuration
 
 app = Flask(__name__)
@@ -118,6 +119,35 @@ def delete_player_stats(player_stats_id):
 
     return redirect("/player_stats")
 
+@app.route("/edit_player_stats/<int:player_stats_id>", methods=["POST", "GET"])
+def edit_player_stats(player_stats_id):
+    if request.method == "GET":
+        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id WHERE player_stats_id = %s" % (player_stats_id)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        query2 = "SELECT player_id, first_name, last_name FROM players"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        player_data = cur.fetchall()
+
+        return render_template("edit_player_stats.j2", data=data, player_data=player_data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Player_Stats"):
+            player_id = request.form["player_id"]
+            points = request.form["points"]
+            rebounds = request.form["rebounds"]
+            assists = request.form["assists"]
+            
+        query = "UPDATE player_stats SET player_stats.player_id = %s, player_stats.points = %s, player_stats.rebounds = %s, player_stats.assists = %s WHERE player_stats.player_stats_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (player_id, points, rebounds, assists, player_stats_id))
+        mysql.connection.commit()
+
+        return redirect("/player_stats")
+
 @app.route('/home_game_sales', methods=["POST", "GET"])
 def home_game_sales():
     if request.method == "GET":
@@ -154,6 +184,8 @@ def home_game_sales():
                 mysql.connection.commit()
         
         return redirect("/home_game_sales")
+
+
 
 @app.route("/delete_home_game_sales/<home_game_date>")
 def delete_home_game_sales(home_game_date):
