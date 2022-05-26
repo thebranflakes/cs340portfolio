@@ -151,7 +151,7 @@ def edit_player_stats(player_stats_id):
 @app.route('/home_game_sales', methods=["POST", "GET"])
 def home_game_sales():
     if request.method == "GET":
-        query = "SELECT home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
+        query = "SELECT home_game_sales.home_game_id as Game, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -171,7 +171,7 @@ def home_game_sales():
             merchandise_revenue = request.form["merchandise_revenue"]
             concession_revenue = request.form["concession_revenue"]
 
-            if visiting_team_id == "0":
+            if visiting_team_id == "":
                 query = "INSERT INTO home_game_sales (home_game_date, tickets_sold, merchandise_revenue, concession_revenue) VALUES (%s, %s, %s, %s)"
                 cur = mysql.connection.cursor()
                 cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue))
@@ -182,19 +182,59 @@ def home_game_sales():
                 cur = mysql.connection.cursor()
                 cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue))
                 mysql.connection.commit()
-        
+    
         return redirect("/home_game_sales")
 
 
 
-@app.route("/delete_home_game_sales/<home_game_date>")
-def delete_home_game_sales(home_game_date):
-    query = "DELETE FROM home_game_sales WHERE home_game_date = '%s';"
+@app.route("/delete_home_game_sales/<int:home_game_id>")
+def delete_home_game_sales(home_game_id):
+    query = "DELETE FROM home_game_sales WHERE home_game_id = '%s';"
     cur = mysql.connection.cursor()
-    cur.execute(query, (home_game_date,))
+    cur.execute(query, (home_game_id,))
     mysql.connection.commit()
 
     return redirect("/home_game_sales")
+
+
+@app.route("/edit_home_game_sales/<int:home_game_id>", methods=["POST", "GET"])
+def edit_home_game_sales(home_game_id):
+    if request.method == "GET":
+            query = "SELECT home_game_sales.home_game_id as Game, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id WHERE home_game_id = %s" % (home_game_id)
+            cur = mysql.connection.cursor()
+            cur.execute(query)
+            data = cur.fetchall()
+
+            query2 = "SELECT visiting_team_id, name FROM visiting_teams"
+            cur = mysql.connection.cursor()
+            cur.execute(query2)
+            visiting_team_data = cur.fetchall()
+
+            return render_template("edit_home_game_sales.j2", data=data, visiting_team_data=visiting_team_data)
+
+    if request.method == "POST":
+        if request.form.get("Edit_Home_Game_Sales"):
+            home_game_date = request.form["home_game_date"]
+            visiting_team_id = request.form["visiting_team_id"]
+            tickets_sold = request.form["tickets_sold"]
+            merchandise_revenue = request.form["merchandise_revenue"]
+            concession_revenue = request.form["concession_revenue"]
+
+        if visiting_team_id == "":
+            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.tickets_sold = %s, home_game_sales.merchandise_revenue = %s, home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue))
+            mysql.connection.commit()
+
+            return redirect("/home_game_sales")
+
+        else:
+            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.visiting_team_id = %s, home_game_sales.tickets_sold = %s, home_game_sales.merchandise_revenue = %s, home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue))
+            mysql.connection.commit()
+    
+            return redirect("/home_game_sales")
 
 
 

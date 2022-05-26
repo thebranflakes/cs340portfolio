@@ -10,16 +10,16 @@
             <table border="1">
 			    <thead>
 				    <tr>
-							<!-- Iterate through each key in the first entry to get the column name -->
-							{% for key in data[0].keys() %}
-							
-							<!-- Create a <th> tag with the key inside of it, this will be our header row -->
-							<th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
-						
-							<!-- End of this for loop -->
-							{% endfor %} 
-							<th>Edit Sales</th>
-							<th>Delete Sales</th>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+            <th>Edit Sales</th>
+			<th>Delete Game</th>
                     </tr>
 
 				<tbody>
@@ -33,8 +33,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_home_game_sales/{{item.home_game_date}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_home_game_sales/{{item.home_game_date}}" class="btn btn-default">Delete</a></td>
+						    <td><a href="edit_home_game_sales/{{item.home_game_id}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_home_game_sales/{{item.home_game_id}}" class="btn btn-default">Delete</a></td>
 
 					    </tr> 
                         {% endfor %} 
@@ -54,6 +54,7 @@
 
 				<label for="make">Visitor:</label>
 				<select name="visiting_team_id" id="visiting_team_id">
+					<option value="" </option>
             		{% for item in visiting_team_data %}
             		<option value="{{item.visiting_team_id}}">{{item.name}} </option>
             		{% endfor %}
