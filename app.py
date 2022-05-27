@@ -84,7 +84,8 @@ def edit_players(player_id):
 @app.route('/player_stats', methods=["POST", "GET"])
 def player_stats():
     if request.method == "GET":
-        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id"
+        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, \
+        player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -122,7 +123,9 @@ def delete_player_stats(player_stats_id):
 @app.route("/edit_player_stats/<int:player_stats_id>", methods=["POST", "GET"])
 def edit_player_stats(player_stats_id):
     if request.method == "GET":
-        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id WHERE player_stats_id = %s" % (player_stats_id)
+        query = "SELECT player_stats.player_stats_id, players.first_name AS First, players.last_name AS Last, player_stats.points AS Points, \
+        player_stats.rebounds AS Rebounds, player_stats.assists AS Assists FROM player_stats INNER JOIN players ON player_stats.player_id = players.player_id \
+        WHERE player_stats_id = %s" % (player_stats_id)
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -151,7 +154,9 @@ def edit_player_stats(player_stats_id):
 @app.route('/home_game_sales', methods=["POST", "GET"])
 def home_game_sales():
     if request.method == "GET":
-        query = "SELECT home_game_sales.home_game_id as Game, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
+        query = "SELECT home_game_id, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, \
+        home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor \
+        FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id"
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -200,7 +205,9 @@ def delete_home_game_sales(home_game_id):
 @app.route("/edit_home_game_sales/<int:home_game_id>", methods=["POST", "GET"])
 def edit_home_game_sales(home_game_id):
     if request.method == "GET":
-            query = "SELECT home_game_sales.home_game_id as Game, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id WHERE home_game_id = %s" % (home_game_id)
+            query = "SELECT home_game_id, home_game_sales.home_game_date AS Date, home_game_sales.tickets_sold AS Tickets, \
+            home_game_sales.merchandise_revenue AS Merchandise, home_game_sales.concession_revenue AS Concessions, visiting_teams.name as Visitor \
+            FROM home_game_sales INNER JOIN visiting_teams ON visiting_teams.visiting_team_id = home_game_sales.visiting_team_id WHERE home_game_id = %s" % (home_game_id)
             cur = mysql.connection.cursor()
             cur.execute(query)
             data = cur.fetchall()
@@ -221,17 +228,19 @@ def edit_home_game_sales(home_game_id):
             concession_revenue = request.form["concession_revenue"]
 
         if visiting_team_id == "":
-            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.tickets_sold = %s, home_game_sales.merchandise_revenue = %s, home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
+            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.tickets_sold = %s, home_game_sales.merchandise_revenue = %s, \
+            home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
             cur = mysql.connection.cursor()
-            cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue))
+            cur.execute(query, (home_game_date, tickets_sold, merchandise_revenue, concession_revenue, home_game_id))
             mysql.connection.commit()
 
             return redirect("/home_game_sales")
 
         else:
-            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.visiting_team_id = %s, home_game_sales.tickets_sold = %s, home_game_sales.merchandise_revenue = %s, home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
+            query = "UPDATE home_game_sales SET home_game_sales.home_game_date = %s, home_game_sales.visiting_team_id = %s, home_game_sales.tickets_sold = %s, \
+            home_game_sales.merchandise_revenue = %s, home_game_sales.concession_revenue = %s WHERE home_game_sales.home_game_id = %s"
             cur = mysql.connection.cursor()
-            cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue))
+            cur.execute(query, (home_game_date, visiting_team_id, tickets_sold, merchandise_revenue, concession_revenue, home_game_id))
             mysql.connection.commit()
     
             return redirect("/home_game_sales")
